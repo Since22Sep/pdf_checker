@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LLM PDF Rule Checker</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="card">
+            <h2 class="title">📄 LLM PDF Rule Checker</h2>
+
+            <label class="upload-label">Upload PDF File</label>
+            <input type="file" id="pdfFile" accept="application/pdf" class="file-input"/>
+
+            <button id="uploadBtn" class="upload-btn">
+                Analyze PDF
+            </button>
+
+            <h3 class="result-title">Result</h3>
+            <pre id="resultBox" class="result-box">Waiting for input...</pre>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
