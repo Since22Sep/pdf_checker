@@ -3,27 +3,30 @@ document.getElementById('uploadBtn').addEventListener('click', async () => {
     const rule1 = document.getElementById('rule1').value;
     const rule2 = document.getElementById('rule2').value;
     const rule3 = document.getElementById('rule3').value;
-    const resultBox = document.getElementById('resultBox');
+    const resultBody = document.getElementById('resultBody');
 
     if (!fileInput.files.length) {
-        resultBox.textContent = "❗ Upload a PDF first.";
+        resultBody.innerHTML = `<tr><td colspan="5">❗ Upload a PDF first.</td></tr>`
         return;
     }
 
-    const rules = [rule1, rule2, rule3];
-    if (rules.some(r => !r.trim())) {
-        resultBox.textContent = "❗ Enter all 3 rules.";
+    // this checkpoint was also important
+
+     if (!rule1 || !rule2 || !rule3) {
+        resultBody.innerHTML = `<tr><td colspan="5">❗ Enter all 3 rules.</td></tr>`;
         return;
     }
 
-    resultBox.textContent = "⏳ Processing... This may take a few seconds.";
+     resultBody.innerHTML = `<tr><td colspan="5">⏳ Processing... This may take a few seconds.</td></tr>`
+
+       const rules = [rule1, rule2, rule3];
 
     const formData = new FormData();
     formData.append('pdf', fileInput.files[0]);
     formData.append('rules', JSON.stringify(rules));
 
     try {
-        const res = await fetch("http://localhost:5000/upload", {
+        const res = await fetch("http://127.0.0.1:5000/upload", {
             method: "POST",
             body: formData
         });
@@ -31,23 +34,20 @@ document.getElementById('uploadBtn').addEventListener('click', async () => {
         const data = await res.json();
 
         if (data.success) {
-            resultBox.innerHTML = '';
-            data.results.forEach((r, idx) => {
-                resultBox.innerHTML += `
-                    <div class="rule-result">
-                        <p><strong>Rule ${idx+1}:</strong> ${r.rule}</p>
-                        <p>Status: <strong>${r.status.toUpperCase()}</strong></p>
-                        <p>Evidence: ${r.evidence}</p>
-                        <p>Reasoning: ${r.reasoning}</p>
-                        <p>Confidence: ${r.confidence}</p>
-                        <hr>
-                    </div>
-                `;
-            });
-        } else {
-            resultBox.textContent = "❌ Error: " + (data.error || "Unknown error");
+            resultBody.innerHTML = '';
+          data.results.forEach(r => {
+            resultBody.innerHTML += `
+                <tr>
+                    <td>${r.rule}</td>
+                    <td>${r.status.toUpperCase()}</td>
+                    <td>${r.evidence}</td>
+                    <td>${r.reasoning}</td>
+                    <td>${r.confidence}</td>
+                </tr>
+            `;
+        });
         }
     } catch (err) {
-        resultBox.textContent = "❌ Error: " + err.message;
+        resultBody.textContent = "❌ Error: " + err.message;
     }
 });

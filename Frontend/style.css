@@ -5,8 +5,11 @@ body
     justify-content:center; 
     align-items:center; 
     height:100vh; 
+    margin: 0;
 }
-.container { width: 450px; }
+.container { 
+    width: 450px; 
+}
 
 .card {
      background:#fff; 
@@ -34,7 +37,25 @@ button {
 button:hover {
      background:#0056b3;
      }
-.rule-result { 
-    text-align:left; 
-    margin-bottom:10px; 
+
+     table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+  font-size: 14px;
 }
+
+table, th, td {
+  border: 1px solid #ddd;
+}
+
+th {
+  background: #007BFF;
+  color: white;
+  padding: 8px;
+}
+td {
+  padding: 8px;
+  text-align: left;
+}
+

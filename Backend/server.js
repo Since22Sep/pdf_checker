@@ -15,7 +15,7 @@ app.use(cors());
 app.use(express.json());
 
 // Multer memory storage
-const storage = multer.memoryStorage();
+ const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 // OpenAI client (v4)
@@ -39,7 +39,7 @@ app.post('/upload', upload.single('pdf'), async (req, res) => {
         try {
             const pdfData = await pdfParse(req.file.buffer);
             pdfText = pdfData.text;
-        } catch (err) {
+        } catch  {
             return res.status(400).json({ 
                 error: "Could not parse PDF. It might be corrupted or image-only." 
             });
@@ -67,7 +67,7 @@ Respond in JSON format:
 
             // Call OpenAI API
             const completion = await openai.chat.completions.create({
-                model: "gpt-3.5-turbo",
+                model: "gpt-4o-mini",
                 messages: [{ role: "user", content: prompt }],
                 temperature: 0
             });
@@ -84,10 +84,7 @@ Respond in JSON format:
                 };
             }
 
-            results.push({
-                rule,
-                ...llmResponse
-            });
+            results.push({ rule, ...llmResponse});
         }
 
         res.json({ success: true, results });
