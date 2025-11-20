@@ -1,49 +1,53 @@
-// When user clicks "Analyze pdf btn"
+document.getElementById('uploadBtn').addEventListener('click', async () => {
+    const fileInput = document.getElementById('pdfFile');
+    const rule1 = document.getElementById('rule1').value;
+    const rule2 = document.getElementById('rule2').value;
+    const rule3 = document.getElementById('rule3').value;
+    const resultBox = document.getElementById('resultBox');
 
-document.getElementById('uploadBtn').addEventListener('click',async()=>{
-    const fileInpt = document.getElementById('pdfFile')
-    const resultBox = document.getElementById('resultBox')
-
-    // now check if user uploaded a pdf or not
-
-    if(!fileInpt.files.length){
-        resultBox.textContent = " ❗Upload a PDF first."
-        return
+    if (!fileInput.files.length) {
+        resultBox.textContent = "❗ Upload a PDF first.";
+        return;
     }
 
-     //FormData object to send file to backend
-    const formData = new FormData()
-    formData.append('pdf', fileInpt.files[0])
+    const rules = [rule1, rule2, rule3];
+    if (rules.some(r => !r.trim())) {
+        resultBox.textContent = "❗ Enter all 3 rules.";
+        return;
+    }
 
-    // Showing loading text while backend processes the document
-    resultBox.textContent = "⏳ Processing... Please wait.";
+    resultBox.textContent = "⏳ Processing... This may take a few seconds.";
+
+    const formData = new FormData();
+    formData.append('pdf', fileInput.files[0]);
+    formData.append('rules', JSON.stringify(rules));
 
     try {
-        // Sending POST request to backend server
         const res = await fetch("http://localhost:5000/upload", {
             method: "POST",
-            body: formData,
-        })
+            body: formData
+        });
 
-        // Extracting JSON response
         const data = await res.json();
 
-        // Displaying nicely formatted result
-        // this is showing raw Json string
-        // resultBox.textContent = JSON.stringify(data, null, 2);
-
-        if(data.success){
-             resultBox.innerHTML = `
-                <p>✅ <strong>Keyword Found:</strong> ${data.containsKeyword}</p>
-                <p>📄 <strong>Preview:</strong> ${data.previewText}</p>
-            `
+        if (data.success) {
+            resultBox.innerHTML = '';
+            data.results.forEach((r, idx) => {
+                resultBox.innerHTML += `
+                    <div class="rule-result">
+                        <p><strong>Rule ${idx+1}:</strong> ${r.rule}</p>
+                        <p>Status: <strong>${r.status.toUpperCase()}</strong></p>
+                        <p>Evidence: ${r.evidence}</p>
+                        <p>Reasoning: ${r.reasoning}</p>
+                        <p>Confidence: ${r.confidence}</p>
+                        <hr>
+                    </div>
+                `;
+            });
         } else {
             resultBox.textContent = "❌ Error: " + (data.error || "Unknown error");
-        
         }
-
     } catch (err) {
-        // Showing error if request fails
         resultBox.textContent = "❌ Error: " + err.message;
     }
-})
+});

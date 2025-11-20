@@ -1,35 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>LLM PDF Rule Checker</title>
-    <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LLM PDF Rule Checker</title>
+<link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-<!-- Main container:- centers the content on the screen -->
-    <div class="container">
-        <div class="card">
-            <h2 class="title">📄 LLM PDF Rule Checker</h2>
+<div class="container">
+  <div class="card">
+    <h2>📄 LLM PDF Rule Checker</h2>
 
-            <label class="upload-label">Upload PDF File</label>
+    <label>Upload PDF:</label>
+    <input type="file" id="pdfFile" accept="application/pdf">
 
-            <!-- file input that accept only pdf -->
-            <input type="file" id="pdfFile" accept="application/pdf" class="file-input"/>
-                  
-            <!-- to trigger the backend request -->
-            <button id="uploadBtn" class="upload-btn">
-                Analyze PDF
-            </button>
-          
-     
-            <h3 class="result-title">Result</h3>
-            <!-- HERE output will be shown -->
-            <pre id="resultBox" class="result-box">Waiting for input...</pre>
-        </div>
-    </div>
+    <label>Rule 1:</label>
+    <input type="text" id="rule1" placeholder="Enter first rule">
+    <label>Rule 2:</label>
+    <input type="text" id="rule2" placeholder="Enter second rule">
+    <label>Rule 3:</label>
+    <input type="text" id="rule3" placeholder="Enter third rule">
 
-    <script src="script.js"></script>
+    <button id="uploadBtn">Analyze PDF</button>
+
+    <h3>Results</h3>
+    <div id="resultBox">Waiting for input...</div>
+  </div>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
