@@ -13,7 +13,7 @@ document.getElementById('uploadBtn').addEventListener('click',async()=>{
 
      //FormData object to send file to backend
     const formData = new FormData()
-    formData.append('pdf', fileInput.files[0])
+    formData.append('pdf', fileInpt.files[0])
 
     // Showing loading text while backend processes the document
     resultBox.textContent = "⏳ Processing... Please wait.";
@@ -29,7 +29,18 @@ document.getElementById('uploadBtn').addEventListener('click',async()=>{
         const data = await res.json();
 
         // Displaying nicely formatted result
-        resultBox.textContent = JSON.stringify(data, null, 2);
+        // this is showing raw Json string
+        // resultBox.textContent = JSON.stringify(data, null, 2);
+
+        if(data.success){
+             resultBox.innerHTML = `
+                <p>✅ <strong>Keyword Found:</strong> ${data.containsKeyword}</p>
+                <p>📄 <strong>Preview:</strong> ${data.previewText}</p>
+            `
+        } else {
+            resultBox.textContent = "❌ Error: " + (data.error || "Unknown error");
+        
+        }
 
     } catch (err) {
         // Showing error if request fails

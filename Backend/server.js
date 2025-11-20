@@ -14,13 +14,13 @@ app.use(cors())
 
 // for file uploads setup the multer
 
-const storageOfFiles = multer.memoryStorage() 
+const storage = multer.memoryStorage();
 const upload = multer({storage: storage})
 
 // chckpoint 
-app.get('/', (req, res) => {
+app.get('/', (req, res)=>{
     res.send('PDF Checker Backend is running!');
-});
+})
 
 
 // uploading pdf and checking the content
@@ -39,14 +39,14 @@ app.post('/upload', upload.single('pdf'), async (req, res) => {
 
         res.json({
             success: true,
-            text: pdfData.text.substring(0, 200), // preview first 200 chars
-            containsKeyword: containsKeyword
-        });
+            previewText: pdfData.text.substring(0, 200), // preview first 200 chars
+            containsKeyword
+        })
     } catch (err) {
         console.error(err);
-        res.status(500).json({ error: 'Error processing PDF' });
+        res.status(500).json({ error: err.message });
     }
-});
+})
 
 // Start server
 app.listen(port, () => {
